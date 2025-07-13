@@ -68,8 +68,8 @@ namespace ToDoApp.WpfClient.ViewModels
             if (string.IsNullOrWhiteSpace(NewTitle))
                 return;
 
-            bool success = await _apiClient.CreateAsync(NewTitle);
-            if (success)
+            var createdItem = await _apiClient.CreateAsync(NewTitle);
+            if (createdItem != null)
             {
                 NewTitle = "";
                 await LoadAsync();

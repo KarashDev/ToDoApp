@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.EntityFrameworkCore;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using ToDoApp.Data;
 using ToDoApp.Services;
 using ToDoApp.Validators;
+using ToDoApp.Mapping;
 using ToDoApp.DTOs;
 
-// 🛠️ Инициализация SQLite провайдера
-SQLitePCL.Batteries_V2.Init(); // <-- Важно!
+// Инициализация SQLite провайдера
+SQLitePCL.Batteries_V2.Init(); 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +24,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ITodoService, TodoService>();
 
 // FluentValidation
-builder.Services.AddValidatorsFromAssemblyContaining<TodoItemDtoValidator>();
+builder.Services.AddTransient<IValidator<CreateTodoItemDto>, TodoItemDtoValidator>();
+
+// Mapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(TodoMappingProfile));
 
 var app = builder.Build();
 

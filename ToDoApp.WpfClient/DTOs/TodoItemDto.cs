@@ -1,6 +1,6 @@
-﻿namespace ToDoApp.WpfClient.Models
+﻿namespace ToDoApp.WpfClient.DTOs
 {
-    public class TodoItem
+    public class TodoItemDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

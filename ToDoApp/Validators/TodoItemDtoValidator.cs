@@ -1,9 +1,9 @@
-﻿namespace ToDoApp.Validators
-{
-    using FluentValidation;
-    using ToDoApp.DTOs;
+﻿using FluentValidation;
+using ToDoApp.DTOs;
 
-    public class TodoItemDtoValidator : AbstractValidator<TodoItemDto>
+namespace ToDoApp.Validators
+{
+    public class TodoItemDtoValidator : AbstractValidator<CreateTodoItemDto>
     {
         public TodoItemDtoValidator()
         {

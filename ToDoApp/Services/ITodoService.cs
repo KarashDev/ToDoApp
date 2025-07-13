@@ -5,9 +5,9 @@ namespace ToDoApp.Services
 {
     public interface ITodoService
     {
-        Task<IEnumerable<TodoItem>> GetAllAsync();
-        Task<TodoItem?> GetByIdAsync(Guid id);
-        Task<TodoItem> CreateAsync(TodoItemDto dto);
+        Task<List<TodoItemDto>> GetAllAsync();
+        Task<TodoItemDto?> GetByIdAsync(Guid id);
+        Task<TodoItemDto> CreateAsync(CreateTodoItemDto createDto);
         Task<bool> DeleteAsync(Guid id);
     }
 }

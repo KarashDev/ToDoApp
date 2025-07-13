@@ -5,7 +5,8 @@ namespace ToDoApp.WpfClient.Services
     public interface ITodoApiClient
     {
         Task<List<TodoItem>> GetAllAsync();
-        Task<bool> CreateAsync(string title);
+        Task<TodoItem?> GetByIdAsync(Guid id);
+        Task<TodoItem?> CreateAsync(string title);
         Task<bool> DeleteAsync(Guid id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ToDoApp.WpfClient.Services;
@@ -19,7 +20,9 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<ITodoApiClient>(provider =>
-                    new TodoApiClient("https://localhost:7040/"));
+                      new TodoApiClient("https://localhost:7040", provider.GetRequiredService<IMapper>()));
+
+                services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
@@ -29,12 +32,19 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        base.OnStartup(e);
+
         await AppHost.StartAsync();
 
-        var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
-        mainWindow.Show();
-
-        base.OnStartup(e);
+        try
+        {
+            var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ошибка при запуске MainWindow:\n\n{ex}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     protected override async void OnExit(ExitEventArgs e)
