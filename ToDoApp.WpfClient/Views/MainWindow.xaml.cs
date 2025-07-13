@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ToDoApp.WpfClient.Services;
 using ToDoApp.WpfClient.ViewModels;
 
 namespace ToDoApp.WpfClient
@@ -10,7 +11,10 @@ namespace ToDoApp.WpfClient
         public MainWindow()
         {
             InitializeComponent();
-            _vm = new MainViewModel();
+
+            var apiClient = new TodoApiClient("https://localhost:7040/");
+            _vm = new MainViewModel(apiClient);
+
             DataContext = _vm;
         }
     }

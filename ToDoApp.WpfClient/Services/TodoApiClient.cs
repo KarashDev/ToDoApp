@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
 using ToDoApp.WpfClient.Models;
 
 namespace ToDoApp.WpfClient.Services
 {
-    public class TodoApiClient
+    public class TodoApiClient : ITodoApiClient
     {
         private readonly HttpClient _httpClient;
 

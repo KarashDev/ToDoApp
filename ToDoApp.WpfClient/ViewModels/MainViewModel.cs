@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using ToDoApp.WpfClient.Models;
 using ToDoApp.WpfClient.Services;
 
@@ -13,11 +8,21 @@ namespace ToDoApp.WpfClient.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly TodoApiClient _apiClient;
+        private readonly ITodoApiClient _apiClient;
         private string _newTitle = "";
         private TodoItem? _selectedItem;
 
         public ObservableCollection<TodoItem> Items { get; } = new();
+
+        public MainViewModel(ITodoApiClient apiClient)
+        {
+            _apiClient = apiClient;
+
+            AddCommand = new AsyncCommand(AddAsync, () => !string.IsNullOrWhiteSpace(NewTitle));
+            DeleteCommand = new AsyncCommand(DeleteAsync, () => SelectedItem != null);
+
+            _ = LoadAsync();
+        }
 
         public string NewTitle
         {
@@ -28,7 +33,7 @@ namespace ToDoApp.WpfClient.ViewModels
                 {
                     _newTitle = value;
                     OnPropertyChanged();
-                    AddCommand?.RaiseCanExecuteChanged(); // <--- вот это добавь
+                    AddCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -49,16 +54,6 @@ namespace ToDoApp.WpfClient.ViewModels
 
         public AsyncCommand AddCommand { get; }
         public AsyncCommand DeleteCommand { get; }
-
-        public MainViewModel()
-        {
-            _apiClient = new TodoApiClient("https://localhost:7040/");
-
-            AddCommand = new AsyncCommand(AddAsync, () => !string.IsNullOrWhiteSpace(NewTitle));
-            DeleteCommand = new AsyncCommand(DeleteAsync, () => SelectedItem != null);
-
-            _ = LoadAsync();
-        }
 
         public async Task LoadAsync()
         {
