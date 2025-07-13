@@ -33,8 +33,8 @@ namespace ToDoApp.Controllers
         public async Task<ActionResult<TodoItemDto>> Create([FromBody] CreateTodoItemDto createDto)
         {
             var validationResult = await _validator.ValidateAsync(createDto);
-            //if (!validationResult.IsValid)
-            //    return BadRequest(validationResult.Errors);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
 
             var created = await _todoService.CreateAsync(createDto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
